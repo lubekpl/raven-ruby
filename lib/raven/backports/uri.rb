@@ -7,22 +7,24 @@
 #
 
 module URI
-  TBLENCWWWCOMP_ = {} # :nodoc:
-  256.times do |i|
-    TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
+  if TBLENCWWWCOMP_.empty? && TBLDECWWWCOMP_.empty?
+    TBLENCWWWCOMP_ = {} # :nodoc:
+    256.times do |i|
+      TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
+    end
+    TBLENCWWWCOMP_[' '] = '+'
+    TBLENCWWWCOMP_.freeze
+    TBLDECWWWCOMP_ = {} # :nodoc:
+    256.times do |i|
+      h, l = i>>4, i&15
+      TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
+      TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
+    end
+    TBLDECWWWCOMP_['+'] = ' '
+    TBLDECWWWCOMP_.freeze
   end
-  TBLENCWWWCOMP_[' '] = '+'
-  TBLENCWWWCOMP_.freeze
-  TBLDECWWWCOMP_ = {} # :nodoc:
-  256.times do |i|
-    h, l = i>>4, i&15
-    TBLDECWWWCOMP_['%%%X%X' % [h, l]] = i.chr
-    TBLDECWWWCOMP_['%%%x%X' % [h, l]] = i.chr
-    TBLDECWWWCOMP_['%%%X%x' % [h, l]] = i.chr
-    TBLDECWWWCOMP_['%%%x%x' % [h, l]] = i.chr
-  end
-  TBLDECWWWCOMP_['+'] = ' '
-  TBLDECWWWCOMP_.freeze
 
   # Encode given +s+ to URL-encoded form data.
   #
