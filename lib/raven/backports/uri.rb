@@ -7,7 +7,7 @@
 #
 
 module URI
-  if TBLENCWWWCOMP_.empty? && TBLDECWWWCOMP_.empty?
+  unless defined? TBLENCWWWCOMP_ && defined? TBLDECWWWCOMP_
     TBLENCWWWCOMP_ = {} # :nodoc:
     256.times do |i|
       TBLENCWWWCOMP_[i.chr] = '%%%02X' % i
